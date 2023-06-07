@@ -12,6 +12,7 @@ async function createPost() {
             topics, because once you get past the boring bullet-point lists, a whole new world of thrifty nerdery
             opens up. You know those bullet-point lists. You start spotting them everything at this time of year.
             They go like this:`,
+      username: "Koushik",
     });
 
     const blog = await newBlog.save();
@@ -42,5 +43,5 @@ async function findPost() {
 //     console.log("Error ", err);
 //   });
 
-// createPost();
+createPost();
 // findPost();
