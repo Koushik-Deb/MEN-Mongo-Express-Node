@@ -2,6 +2,7 @@ const express = require("express");
 const path = require("path");
 const mongoose = require("mongoose");
 const bodyParser = require("body-parser");
+const fileUpload = require("express-fileupload");
 
 const BlogPost = require("./models/BlogPost");
 const app = express();
@@ -13,6 +14,7 @@ app.set("view engine", "ejs");
 app.use(express.static("public"));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
+app.use(fileUpload());
 app.listen(3000, () => {
   console.log("App listening on port 3000");
 });
@@ -45,9 +47,17 @@ app.get("/posts/new", (req, res) => {
 app.post("/posts/store", async (req, res) => {
   // console.log(req.body);
   try {
-    const newBlog = await new BlogPost(req.body);
-    await newBlog.save();
-    res.redirect("/");
+    let image = req.files.image;
+    let folder = path.resolve(__dirname, "public/img", image.name);
+    console.log("image ", folder);
+    image.mv(folder, async (error) => {
+      const newBlog = await new BlogPost({
+        ...req.body,
+        image: "/img/" + image.name,
+      });
+      await newBlog.save();
+      res.redirect("/");
+    });
   } catch (err) {
     console.log("Error in createPost ", err);
   }
