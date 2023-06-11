@@ -15,9 +15,17 @@ app.use(express.static("public"));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(fileUpload());
+app.use("/posts/store", validateMiddleWare);
 app.listen(3000, () => {
   console.log("App listening on port 3000");
 });
+
+const validateMiddleWare = (req, res, next) => {
+  if (req.files == null || req.body.title == null || req.body.title == null) {
+    return res.redirect("/posts/new");
+  }
+  next();
+};
 
 app.get("/", async (req, res) => {
   // res.sendFile(path.resolve(__dirname, "pages/index.html"));
