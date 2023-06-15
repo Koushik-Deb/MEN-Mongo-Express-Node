@@ -9,6 +9,8 @@ const homeController = require("./controllers/home");
 const newPostController = require("./controllers/newPost");
 const storePostController = require("./controllers/storePost");
 const getPostController = require("./controllers/getPost");
+const storeUserController = require("./controllers/storeUser");
+const newUserController = require("./controllers/newUser");
 const validateMiddleWare = require("./middleware/validationMiddleware");
 mongoose.connect("mongodb://127.0.0.1/blog_db", { useNewUrlParser: true });
 
@@ -24,6 +26,8 @@ app.listen(3000, () => {
 
 app.use("/posts/store", validateMiddleWare);
 app.get("/", homeController);
+app.get("/auth/register", newUserController);
 app.get("/post/:id", getPostController);
 app.get("/posts/new", newPostController);
 app.post("/posts/store", storePostController);
+app.post("/users/register", storeUserController);
